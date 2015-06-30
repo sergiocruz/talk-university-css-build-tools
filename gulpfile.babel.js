@@ -184,3 +184,18 @@ gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
 gulp.task('default', ['clean'], () => {
   gulp.start('build');
 });
+
+// take screenshots
+gulp.task('screenshots', ['build'], () => {
+
+  gulp
+    .src('./dist/*.html')
+    .pipe($.localScreenshots({
+      width: ['1600', '1000', '480', '320'],
+      type: 'png',
+      folder: './screenshots',
+      server: true,
+      path: 'dist/'
+    }));
+
+});

@@ -87,9 +87,11 @@ body {
 }
 
 // Step 0: Auto prefixer:
-// .crazy-goat {
-//   filter: grayscale(100%);
-// }
+.crazy-goat {
+  // filter: grayscale(100%);
+  // max-width: 100%;
+  // height: auto;
+}
 
 // Step 1: uncss and twerk
 .twerk {
