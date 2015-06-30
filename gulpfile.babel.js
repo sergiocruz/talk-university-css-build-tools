@@ -166,6 +166,17 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
+// css regression testing
+gulp.task('regression', () => {
+
+  gulp.src('./test/e2e/testsuite.js')
+    .pipe($.phantomcss({
+      screenshots: './test/e2e/screenshots',
+      viewportSize: [1280, 800],
+    }));
+
+});
+
 gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
