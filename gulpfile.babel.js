@@ -129,7 +129,8 @@ gulp.task('serve:dist', () => {
     port: 9000,
     server: {
       baseDir: ['dist']
-    }
+    },
+    open: false
   });
 });
 
@@ -166,17 +167,6 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-// css regression testing
-gulp.task('regression', () => {
-
-  gulp.src('./test/e2e/testsuite.js')
-    .pipe($.phantomcss({
-      screenshots: './test/e2e/screenshots',
-      viewportSize: [1280, 800],
-    }));
-
-});
-
 gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
@@ -199,3 +189,19 @@ gulp.task('screenshots', ['build'], () => {
     }));
 
 });
+
+// clean old screenshots
+gulp.task('clean-screenshots', del.bind(null, ['./screenshots/*.png']));
+
+// Diff images
+gulp.task('diff-images', ['screenshots'], () => {
+    return gulp.src(['./psd/desired-index-1000.png'])
+      .pipe($.imageDiff({
+        referenceImage: './screenshots/index-1000.png',
+        differenceMapImage: './test/e2e/diff-1000.png',
+        logProgress: true
+      }))
+      .pipe($.imageDiff.jsonReporter())
+      .pipe(gulp.dest('./test/e2e/diff-analysis-report.json'));
+});
+
