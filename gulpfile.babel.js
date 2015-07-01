@@ -129,7 +129,8 @@ gulp.task('serve:dist', () => {
     port: 9000,
     server: {
       baseDir: ['dist']
-    }
+    },
+    open: false
   });
 });
 
@@ -188,3 +189,19 @@ gulp.task('screenshots', ['build'], () => {
     }));
 
 });
+
+// clean old screenshots
+gulp.task('clean-screenshots', del.bind(null, ['./screenshots/*.png']));
+
+// Diff images
+gulp.task('diff-images', ['screenshots'], () => {
+    return gulp.src(['./psd/desired-index-1000.png'])
+      .pipe($.imageDiff({
+        referenceImage: './screenshots/index-1000.png',
+        differenceMapImage: './test/e2e/diff-1000.png',
+        logProgress: true
+      }))
+      .pipe($.imageDiff.jsonReporter())
+      .pipe(gulp.dest('./test/e2e/diff-analysis-report.json'));
+});
+
